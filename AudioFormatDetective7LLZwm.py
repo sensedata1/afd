@@ -123,12 +123,12 @@ def process_audio_files(currentFile):
                 audio = r.record(source, duration=10)
 
                 recognisedSpeech = str((r.recognize_google(audio)))
-                if "audio" or "jungle" or "audiojungle" in recognisedSpeech:
+                if "audio" in recognisedSpeech:
                     ch = red("WM")
-                # if "jungle" in recognisedSpeech:
-                #     ch = red("WM")
-                # if "audi" in recognisedSpeech:
-                #     ch = red("WM")
+                if "jungle" in recognisedSpeech:
+                    ch = red("WM")
+                if "audi" in recognisedSpeech:
+                    ch = red("WM")
                 else:
                     ch = "  "
         except Exception as e:
