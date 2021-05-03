@@ -18,7 +18,7 @@ from watchdog.observers import Observer
 from multiprocessing import Process, Pool
 import multiprocessing
 import sys
-import cmu-pocketsphinx as ps
+
 
 # Let's define some colours
 black = lambda text: '\033[0;30m' + text + '\033[0m'
