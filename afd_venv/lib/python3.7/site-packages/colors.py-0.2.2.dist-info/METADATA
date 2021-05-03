@@ -1,0 +1,25 @@
+Metadata-Version: 2.0
+Name: colors.py
+Version: 0.2.2
+Summary: Convert and manipulate color values
+Home-page: https://github.com/mattrobenolt/colors.py
+Author: Matt Robenolt
+Author-email: matt@ydekproductions.com
+License: BSD
+Platform: UNKNOWN
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development
+
+colors.py
+=========
+Convert colors between rgb, hsv, and hex, perform arithmetic, blend modes,
+and generate random colors within boundaries.
+
+

@@ -1,0 +1,63 @@
+.TH "TRACKLINT" 1 "April 2021" "" "Track Checker"
+.SH NAME
+tracklint \- checks and fixes minor track metadata errors automatically
+.SH SYNOPSIS
+tracklint [OPTIONS] <track 1> [track 2] ....
+.SH DESCRIPTION
+.PP
+tracklint takes a list of audio tracks, examines their metadata for common problems and suggests fixes for them. If directories are given, tracklint searches them recursively and suggests fixes for any audio tracks found. tracklint can also perform any suggested metadata fixes if requested, and undo any performed fixes if an undo database was used.
+.SH OPTIONS
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+show a list of options and exit
+.TP
+\fB\-\-fix\fR
+perform tracklint's suggested fixes on the given audio tracks
+.TP
+\fB\-V\fR, \fB\-\-verbose\fR=\fIVERBOSITY\fR
+The level of output to display. Choose between 'normal', 'quiet' and 'debug'.
+.SH FIXES
+The following fixes are performed on each track:
+.PP
+\[bu] Leading zeroes are stripped from track number and album number fields. For example, a track number value of "01" is changed to "1".
+.PP
+\[bu] If the track number field is between 100 and 999, the leading digit becomes the album number and trailing two digits becomes the track number. For example, a track number value of "213" results in an album number of "2" and a track number of "13".
+.PP
+\[bu] If the performer name is the same as the artist name, the redundant performer name field is removed.
+.PP
+\[bu] Leading or trailing whitespace is removed from fields. For example, a track name value of "Some Title " becomes "Some Title".
+.PP
+\[bu] Empty fields are removed.
+.PP
+\[bu] Embedded images with invalid metadata fields such as width or height are fixed.
+.PP
+\[bu] ID3v2 and ID3v1 tags are stripped from FLAC files.
+.PP
+\[bu] FLAC files with misordered STREAMINFO blocks are reordered.
+.PP
+\[bu] A WAVEFORMATEXTENSIBLE_CHANNEL_MASK tag is added to multi-channel or 24 bits-per-sample FLAC files if one isn't present in its metadata.
+.PP
+.SH SEE ALSO
+.BR audiotools-config (1),
+.BR audiotools.cfg (5),
+.BR cdda2track (1),
+.BR cddainfo (1),
+.BR cddaplay (1),
+.BR coverdump (1),
+.BR covertag (1),
+.BR coverview (1),
+.BR dvda2track (1),
+.BR dvdainfo (1),
+.BR track2cdda (1),
+.BR track2track (1),
+.BR trackcat (1),
+.BR trackcmp (1),
+.BR trackinfo (1),
+.BR tracklength (1),
+.BR trackplay (1),
+.BR trackrename (1),
+.BR tracksplit (1),
+.BR tracktag (1),
+.BR trackverify (1)
+.SH AUTHOR
+Brian Langenberger

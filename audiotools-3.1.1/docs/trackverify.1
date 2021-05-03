@@ -1,0 +1,71 @@
+.TH "TRACKVERIFY" 1 "April 2021" "" "Track Verify"
+.SH NAME
+trackverify \- verifies the data content of tracks
+.SH SYNOPSIS
+trackverify [OPTIONS] <track 1> [track 2] ...
+.SH DESCRIPTION
+.PP
+trackverify takes one or more audio tracks, verifies their files for correctness, and displays its results to standard output. If directories are given, they are searched recursively for any supported audio files and verified if found.
+.SH OPTIONS
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+show a list of options and exit
+.TP
+\fB\-t\fR, \fB\-\-type\fR=\fITYPE\fR
+An audio format to restrict searching to. If given, only files of the given audio types will be verified. May be used multiple times. For a list of available audio formats, try: -t help
+.TP
+\fB\-S\fR, \fB\-\-no\-summary\fR
+do not display summary information when verification is complete
+.TP
+\fB\-R\fR, \fB\-\-accuraterip\fR
+verify tracks against those of AccurateRip database
+.TP
+\fB\-\-cue\fR=\fIFILENAME\fR
+cuesheet to use when verifying CD image against AccurateRip database
+.TP
+\fB\-j\fR, \fB\-\-joint\fR=\fIPROCESSES\fR
+The maximum number of tracks to verify at one time. If one has multiple CPUs or CPU cores, allowing trackverify(1) to use all of them simultaneously can increase verification speed. However, the maximum speed is likely to be limited by I/O-bound rather than CPU-bound.
+.TP
+\fB\-V\fR, \fB\-\-verbose\fR=\fIVERBOSITY\fR
+The level of output to display. Choose between 'normal', 'quiet' and 'debug'.
+.SH VERIFICATION
+All audio formats do not carry an equal measure of error protection. What Python Audio Tools is capable to detecting depends on the audio format. For example, FLAC files have their frame checksums verified, in addition to the file's MD5 hash. Files packed in Ogg containers have their Ogg page checksums verified. However, for formats such as Wave, there is no standard way to verify that its data content is correct; we can only ensure that its blocks of data are the correct size.
+.PP
+.SH ACCURATERIP
+Verifying lossless tracks against AccurateRip's online database is a way of ensuring one's rips are identical to rips performed by other people. The confidence level is the number of other people who have the same rip, so a larger value indicates one's own rip is consistent with those of others. However, not finding one's rip in the AccurateRip database does not necessarily mean the rip is bad; the CD may be new, rare, or a different pressing than the one in the database.
+.PP
+.SH EXAMPLES
+.LP
+Check all FLAC files in the current directory:
+.IP
+trackverify *.flac
+
+.LP
+Check only MP3 files found in the directory audio/
+.IP
+trackverify -t mp3 audio/
+
+.SH SEE ALSO
+.BR audiotools-config (1),
+.BR audiotools.cfg (5),
+.BR cdda2track (1),
+.BR cddainfo (1),
+.BR cddaplay (1),
+.BR coverdump (1),
+.BR covertag (1),
+.BR coverview (1),
+.BR dvda2track (1),
+.BR dvdainfo (1),
+.BR track2cdda (1),
+.BR track2track (1),
+.BR trackcat (1),
+.BR trackcmp (1),
+.BR trackinfo (1),
+.BR tracklength (1),
+.BR tracklint (1),
+.BR trackplay (1),
+.BR trackrename (1),
+.BR tracksplit (1),
+.BR tracktag (1)
+.SH AUTHOR
+Brian Langenberger

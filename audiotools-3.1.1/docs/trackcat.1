@@ -1,0 +1,89 @@
+.TH "TRACKCAT" 1 "April 2021" "" "Audio Concatenator"
+.SH NAME
+trackcat \- concatenate two or more audio tracks
+.SH SYNOPSIS
+trackcat [OPTIONS] <track 1> [track 2] [track 3] ...
+.SH DESCRIPTION
+.PP
+trackcat combines the audio data from two or more audio tracks into a single output track.
+.SH OPTIONS
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+show a list of options and exit
+.TP
+\fB\-I\fR, \fB\-\-interactive\fR
+edit metadata and encoding options in interactive mode prior to converting tracks
+.TP
+\fB\-\-cue\fR=\fIFILENAME\fR
+a cuesheet to embed in the output file
+.TP
+\fB\-\-add\-cue\fR
+Embed a cuesheet in the output file using the track lengths as index points. This option assures a concatenated file can be re-split into its original tracks even if the original cuesheet is not available.
+.TP
+\fB\-V\fR, \fB\-\-verbose\fR=\fIVERBOSITY\fR
+The level of output to display. Choose between 'normal', 'quiet' and 'debug'.
+.SH ENCODING OPTIONS
+.TP
+\fB\-o\fR, \fB\-\-output\fR=\fIFILENAME\fR
+the output filename of the concatenated track
+.TP
+\fB\-t\fR, \fB\-\-type\fR=\fITYPE\fR
+the audio format of the concatenated track; for a list of available audio formats, try: -t help
+.TP
+\fB\-q\fR, \fB\-\-quality\fR=\fIQUALITY\fR
+the desired quality of the concatenated track; for a list of available quality modes for a given format, try: -q help
+.SH CD LOOKUP OPTIONS
+.TP
+\fB\-M\fR, \fB\-\-metadata\-lookup\fR
+perform metadata lookup for converted tracks
+.TP
+\fB\-\-musicbrainz\-server\fR=\fIHOSTNAME\fR
+the MusicBrainz server name to query for metadata
+.TP
+\fB\-\-musicbrainz\-port\fR=\fIPORT\fR
+the MusicBrainz port to query for metadata
+.TP
+\fB\-\-no\-musicbrainz\fR
+don't query MusicBrainz for metadata
+.TP
+\fB\-\-freedb\-server\fR=\fIHOSTNAME\fR
+the FreeDB server name to query for metadata
+.TP
+\fB\-\-freedb\-port\fR=\fIPORT\fR
+the FreeDB port to query for metadata
+.TP
+\fB\-\-no\-freedb\fR
+don't query FreeDB for metadata
+.TP
+\fB\-D\fR, \fB\-\-default\fR
+When multiple metadata choices are available, select the first one automatically. This option has no effect when used with -I
+.SH EXAMPLE
+.LP
+Convert all of the WAVE files in sourcedir to a single FLAC file, album.flac at the highest possible compression (quality 8):
+.IP
+trackcat -t flac -q 8 -o album.flac sourcedir/*.wav
+
+.SH SEE ALSO
+.BR audiotools-config (1),
+.BR audiotools.cfg (5),
+.BR cdda2track (1),
+.BR cddainfo (1),
+.BR cddaplay (1),
+.BR coverdump (1),
+.BR covertag (1),
+.BR coverview (1),
+.BR dvda2track (1),
+.BR dvdainfo (1),
+.BR track2cdda (1),
+.BR track2track (1),
+.BR trackcmp (1),
+.BR trackinfo (1),
+.BR tracklength (1),
+.BR tracklint (1),
+.BR trackplay (1),
+.BR trackrename (1),
+.BR tracksplit (1),
+.BR tracktag (1),
+.BR trackverify (1)
+.SH AUTHOR
+Brian Langenberger

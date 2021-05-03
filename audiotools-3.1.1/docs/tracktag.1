@@ -1,0 +1,193 @@
+.TH "TRACKTAG" 1 "April 2021" "" "Audio File Tagger"
+.SH NAME
+tracktag \- update audio file metadata
+.SH SYNOPSIS
+tracktag [OPTIONS] <track 1> [track 2] ...
+.SH DESCRIPTION
+.PP
+tracktag takes new metadata values and a list of audio files and updates those files with the new values.
+.SH OPTIONS
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+show a list of options and exit
+.TP
+\fB\-I\fR, \fB\-\-interactive\fR
+Once any other command-line arguments are processed, edit the given tracks in interactive mode.
+.TP
+\fB\-r\fR, \fB\-\-replace\fR
+this options erases all existing metadata and replaces it with any specified values
+.TP
+\fB\-\-replay\-gain\fR
+add ReplayGain metadata to tracks
+.TP
+\fB\-\-remove\-replay\-gain\fR
+remove ReplayGain metadata from tracks
+.TP
+\fB\-j\fR, \fB\-\-joint\fR=\fIPROCESSES\fR
+The maximum number of albums to calculate ReplayGain for at one time.
+.TP
+\fB\-V\fR, \fB\-\-verbose\fR=\fIVERBOSITY\fR
+The level of output to display. Choose between 'normal', 'quiet' and 'debug'.
+.SH TEXT OPTIONS
+.TP
+\fB\-\-name\fR=\fINAME\fR
+the name of the track
+.TP
+\fB\-\-artist\fR=\fINAME\fR
+the track's artist
+.TP
+\fB\-\-performer\fR=\fINAME\fR
+the track's performer
+.TP
+\fB\-\-composer\fR=\fINAME\fR
+the track's composer
+.TP
+\fB\-\-conductor\fR=\fINAME\fR
+the track's conductor
+.TP
+\fB\-\-album\fR=\fINAME\fR
+the track's album name
+.TP
+\fB\-\-catalog\fR=\fINUMBER\fR
+the album's catalog number, typically indicated on its case
+.TP
+\fB\-\-number\fR=\fINUMBER\fR
+the track's number on the disc
+.TP
+\fB\-\-track\-total\fR=\fINUMBER\fR
+the total number of tracks on the disc
+.TP
+\fB\-\-album\-number\fR=\fINUMBER\fR
+the album's number, if it is one in a series of albums; for example, a 3 CD set might have an album number of 1, 2 or 3
+.TP
+\fB\-\-album\-total\fR=\fINUMBER\fR
+the total number of albums in the set
+.TP
+\fB\-\-compilation\fR=\fIYES/NO\fR
+whether the track is part of a compilation
+.TP
+\fB\-\-ISRC\fR=\fIISRC\fR
+the track's ISRC
+.TP
+\fB\-\-publisher\fR=\fINAME\fR
+the album's publisher
+.TP
+\fB\-\-media\-type\fR=\fIMEDIA\fR
+the album's media type, such as "CD", "vinyl", etc.
+.TP
+\fB\-\-year\fR=\fIYEAR\fR
+the album's release year
+.TP
+\fB\-\-date\fR=\fIDATE\fR
+the track's original recording date
+.TP
+\fB\-\-copyright\fR=\fICOPYRIGHT\fR
+the album's copyright information
+.TP
+\fB\-\-comment\fR=\fITEXT\fR
+comment text
+.TP
+\fB\-\-comment\-file\fR=\fIFILENAME\fR
+a file containing comment text, for particularly long comments
+.SH REMOVAL OPTIONS
+.TP
+\fB\-\-remove\-name\fR
+.TP
+\fB\-\-remove\-artist\fR
+.TP
+\fB\-\-remove\-performer\fR
+.TP
+\fB\-\-remove\-composer\fR
+.TP
+\fB\-\-remove\-conductor\fR
+.TP
+\fB\-\-remove\-album\fR
+.TP
+\fB\-\-remove\-catalog\fR
+.TP
+\fB\-\-remove\-number\fR
+.TP
+\fB\-\-remove\-track\-total\fR
+.TP
+\fB\-\-remove\-album\-number\fR
+.TP
+\fB\-\-remove\-album\-total\fR
+.TP
+\fB\-\-remove\-compilation\fR
+.TP
+\fB\-\-remove\-ISRC\fR
+.TP
+\fB\-\-remove\-publisher\fR
+.TP
+\fB\-\-remove\-media\-type\fR
+.TP
+\fB\-\-remove\-year\fR
+.TP
+\fB\-\-remove\-date\fR
+.TP
+\fB\-\-remove\-copyright\fR
+.TP
+\fB\-\-remove\-comment\fR
+.SH CD LOOKUP OPTIONS
+.TP
+\fB\-M\fR, \fB\-\-metadata\-lookup\fR
+perform metadata lookup for tracks as if they were a single CD
+.TP
+\fB\-\-musicbrainz\-server\fR=\fIHOSTNAME\fR
+the MusicBrainz server name to query for metadata
+.TP
+\fB\-\-musicbrainz\-port\fR=\fIPORT\fR
+the MusicBrainz port to query for metadata
+.TP
+\fB\-\-no\-musicbrainz\fR
+don't query MusicBrainz for metadata
+.TP
+\fB\-\-freedb\-server\fR=\fIHOSTNAME\fR
+the FreeDB server name to query for metadata
+.TP
+\fB\-\-freedb\-port\fR=\fIPORT\fR
+the FreeDB port to query for metadata
+.TP
+\fB\-\-no\-freedb\fR
+don't query FreeDB for metadata
+.TP
+\fB\-D\fR, \fB\-\-default\fR
+When multiple metadata choices are available, select the first one automatically. This option has no effect when used with -I
+.SH EXAMPLES
+.LP
+Update track.flac to be track number 5 and have a track name of "Test Track".
+.IP
+tracktag "--name=Test Track" --number=5 track.flac
+
+.LP
+Add ISRC metadata from the disc in /dev/cdrom to all MP3 files in the current directory
+.IP
+cdrdao read-toc --device /dev/cdrom album.toc
+
+.IP
+tracktag --cue=album.toc *.mp3
+
+.SH SEE ALSO
+.BR audiotools-config (1),
+.BR audiotools.cfg (5),
+.BR cdda2track (1),
+.BR cddainfo (1),
+.BR cddaplay (1),
+.BR coverdump (1),
+.BR covertag (1),
+.BR coverview (1),
+.BR dvda2track (1),
+.BR dvdainfo (1),
+.BR track2cdda (1),
+.BR track2track (1),
+.BR trackcat (1),
+.BR trackcmp (1),
+.BR trackinfo (1),
+.BR tracklength (1),
+.BR tracklint (1),
+.BR trackplay (1),
+.BR trackrename (1),
+.BR tracksplit (1),
+.BR trackverify (1)
+.SH AUTHOR
+Brian Langenberger
