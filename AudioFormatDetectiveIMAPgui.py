@@ -1,4 +1,4 @@
-#!afd_venv/bin/python3
+#!/Library/Frameworks/Python.framework/Versions/3.7/bin/python3
 # Shebang for Studio Mac Pro #
 import datetime
 import logging
@@ -17,7 +17,10 @@ from watchdog.events import LoggingEventHandler
 from watchdog.observers import Observer
 from multiprocessing import Process, Pool
 import multiprocessing
+from multiprocessing import freeze_support
+
 import sys
+
 
 # Let's define some colours
 black = lambda text: '\033[0;30m' + text + '\033[0m'
@@ -45,17 +48,17 @@ def unzip():
     for directory, subdirectories, files in os.walk(cwd):
         for file in files:
             # print(file) Debugging output
-            if file.endswith((".zip", ".ZIP")) and os.path.isfile(os.path.join(directory, file)):
+            if file.lower().endswith((".zip",)) and os.path.isfile(os.path.join(directory, file)):
                 currentZipFile = os.path.join(directory, file)
                 zipFolderName = os.path.splitext(currentZipFile)[0]
-                print(file)
+                # print(file)
                 try:
                     with ZipFile(currentZipFile, 'r') as zipArchive:
                         try:
                             zipArchive.extractall(zipFolderName)
-                            print('Extracting...')
-                            print('Done!')
-                            print("")
+                            # print('Extracting...')
+                            # print('Done!')
+                            # print("")
                             os.remove(currentZipFile)
                         except Exception as e:
                             # print("zip file corrupt")
@@ -80,8 +83,8 @@ def process_audio_files(currentFile):
     eyed3.log.setLevel("ERROR")
     curPath, file = os.path.split(currentFile)
 
-    if currentFile.endswith((".mp3", ".MP3", ".Mp3")) and not currentFile.startswith(".") \
-            and os.path.isfile(currentFile) and not file.startswith("_I_"):
+    if currentFile.lower().endswith((".mp3",)) and not currentFile.startswith(".") \
+            and os.path.isfile(currentFile):
         try:
             mp3File = eyed3.load(currentFile)
         except:
@@ -104,8 +107,12 @@ def process_audio_files(currentFile):
         except:
             duration = "***"
         try:
+            # arse = audiotools.open(currentFile)
+            # print(arse.bits_per_sample())
             bits = (audiotools.open(currentFile).bits_per_sample())
-        except:
+            # print(audiotools.open(currentFile).bits_per_sample())
+        except Exception as e:
+            # print(e)
             bits = "  "
 
         # convert mp3 to wav for voice recognition
@@ -123,7 +130,7 @@ def process_audio_files(currentFile):
                 audio = r.record(source, duration=10)
 
                 recognisedSpeech = str((r.recognize_google(audio)))
-                if "audio" in recognisedSpeech:
+                if "audio" or "jungle" or "audiojungle" in recognisedSpeech:
                     ch = red("WM")
                 if "jungle" in recognisedSpeech:
                     ch = red("WM")
@@ -136,14 +143,14 @@ def process_audio_files(currentFile):
             wm = "nowm"
             recognisedSpeech = ''
 
-        if channels == "Joint stereo" or "Stereo" or "stereo" or "Joint Stereo":
+        if channels.lower() == "joint stereo" or "stereo":
             channels = 2
         try:
             rate = int(bitRate[1])
         except:
             rate = "err"
         vbrTrueFalse = "  "
-        if sampleRate == 44100 and channels == 2 and rate < 325 and rate > 315:  # and wm != "wmd":
+        if sampleRate == 44100 and channels == 2 and 325 > rate > 315:  # and wm != "wmd":
             errorMp3 = green(" [ok]")
         else:
             errorMp3 = red("[ERR]")
@@ -151,17 +158,9 @@ def process_audio_files(currentFile):
         #           PRINT MP3 DATA                                                           #
         ######################################################################################
         print(errorMp3, sampleRate, bits, channels, ch, vbrTrueFalse, rate, duration[3:-7], file, red(recognisedSpeech))
-
-        # rename files so they're ignored on next pass
-        if os.path.isfile(currentFile):
-            cPath, cFile = os.path.split(currentFile)
-            cFile = "_I_" + cFile
-            newFileName = (os.path.join(cPath, cFile))
-            os.renames(currentFile, newFileName)
-
     # Look for wav files and evaluate
-    if currentFile.endswith((".wav", ".WAV", ".WaV", ".wAV", ".WAv", ".Wav")) and not currentFile.startswith(".") \
-            and os.path.isfile(currentFile) and not file.startswith("_I_"):
+    if currentFile.lower().endswith((".wav",)) and not currentFile.startswith(".") \
+            and os.path.isfile(currentFile):
         # currentFile = os.path.join(directory, file)
         try:
             sampleRate = (audiotools.open(currentFile).sample_rate())
@@ -190,7 +189,8 @@ def process_audio_files(currentFile):
             with srVoiceTestWav as source:
                 audio = r.record(source, duration=10)
 
-                recognisedSpeech = str((r.recognize_google(audio)))
+                # recognisedSpeech = str((r.recognize_wit(audio, key='RGAIIA26NIKLTR5PFPTMZM5MEHUC4MI3', show_all=False)))
+                recognisedSpeech = str((r.recognize_google(audio, )))
 
                 if "audio" in recognisedSpeech:
                     ch = red("WM")
@@ -214,15 +214,8 @@ def process_audio_files(currentFile):
         #           PRINT WAV DATA                                                           #
         ######################################################################################
         print(errorWav, sampleRate, bits, channels, ch, gap, duration[3:], file, red(recognisedSpeech))
-
-        if os.path.isfile(currentFile):
-            cPath, cFile = os.path.split(currentFile)
-            cFile = "_I_" + cFile
-            newFileName = (os.path.join(cPath, cFile))
-            os.renames(currentFile, newFileName)
-
     # If any other audio file types are present mark as [ERR]
-    if file.endswith((".aac", ".aiff", ".aif", ".flac", ".m4a", ".m4p")) \
+    if file.lower().endswith((".aac", ".aiff", ".aif", ".flac", ".m4a", ".m4p")) \
             and os.path.isfile(currentFile):
         # currentFile = os.path.join(directory, file)
         try:
@@ -246,34 +239,32 @@ def process_audio_files(currentFile):
 
 
 class Event(LoggingEventHandler):
-    def on_created(self, event):
-        # print(os.path.basename(os.path.normpath(event.src_path)))
-        if not os.path.basename(os.path.normpath(event.src_path)).startswith("."):
+    def on_moved(self, event):
+        # print(event)
+        if os.path.basename(os.path.normpath(event.src_path)).endswith(".crdownload"):
             # print(event)
             os.chdir(AJDownloadsFolder)
             cwd = os.getcwd()
-            # unzip()
+            unzip()
             clear()
             print('\n' * 50)
             print("analysing...")
             time.sleep(1)
             currentFileList = []
+
             with Pool(processes=multiprocessing.cpu_count()) as pool:
                 for directory, subdirectories, files in os.walk(cwd):
                     for file in files:
                         tempCurrentFile = os.path.join(directory, file)
-                        if tempCurrentFile.endswith \
-                                    ((".mp3", ".MP3", ".Mp3", ".aac",
+                        if tempCurrentFile.lower().endswith \
+                                    ((".mp3", ".aac",
                                       ".aiff", ".aif", ".flac", ".m4a",
-                                      ".m4p", ".wav", ".WAV", ".WaV",
-                                      ".wAV", ".WAv", ".Wav")) and not tempCurrentFile.startswith(".") \
-                                and os.path.isfile(tempCurrentFile) \
-                                and not file.startswith("_I_"):
+                                      ".m4p", ".wav",)) and not tempCurrentFile.startswith(".") \
+                                and os.path.isfile(tempCurrentFile):
                             currentFileList.append(tempCurrentFile)
 
                 for currentFile in currentFileList:
-                    if not currentFile.startswith("_I_"):
-                        pool.imap_unordered(process_audio_files, (currentFile,))
+                    pool.imap_unordered(process_audio_files, (currentFile,))
 
                 pool.close()
                 pool.join()
@@ -281,12 +272,12 @@ class Event(LoggingEventHandler):
 
 
 if __name__ == "__main__":
+    freeze_support()  ## Always on the first
     multiprocessing.set_start_method('spawn')
     # Suppress warnings from eyeD3
     eyed3.log.setLevel("ERROR")
     # Get AJ Downloads folder from user input
     userFolder = input("Drag your AJ downloads folder here and press enter...")
-    # userFolder = '/Volumes/ProjectsDrive/General\ Downloads/AJ\ TEMP\ DOWNLOADS'
     # Format the user input
     tempVar = userFolder.replace("\\", "")
     tempVar2 = tempVar.rstrip()
@@ -297,8 +288,8 @@ if __name__ == "__main__":
     print("Monitoring " + AJDownloadsFolder + "...")
 
     # logging.basicConfig(level=logging.INFO,
-    #                    format='%(asctime)s - %(message)s',
-    #                    datefmt='%Y-%m-%d %H:%M:%S')
+    #                     format='%(asctime)s - %(message)s',
+    #                     datefmt='%Y-%m-%d %H:%M:%S')
     path = sys.argv[1] if len(sys.argv) > 1 else '.'
     event_handler = Event()
     observer = Observer()

@@ -1,4 +1,4 @@
-#!/Library/Frameworks/Python.framework/Versions/3.7/bin/python3
+#
 # Shebang for Studio Mac Pro #
 import datetime
 import logging
@@ -105,7 +105,7 @@ def process_audio_files(currentFile):
         except:
             duration = "***"
         try:
-            arse = audiotools.open(currentFile)
+            # arse = audiotools.open(currentFile)
             # print(arse.bits_per_sample())
             bits = (audiotools.open(currentFile).bits_per_sample())
             # print(audiotools.open(currentFile).bits_per_sample())
@@ -187,7 +187,8 @@ def process_audio_files(currentFile):
             with srVoiceTestWav as source:
                 audio = r.record(source, duration=10)
 
-                recognisedSpeech = str((r.recognize_google(audio)))
+                # recognisedSpeech = str((r.recognize_wit(audio, key='RGAIIA26NIKLTR5PFPTMZM5MEHUC4MI3', show_all=False)))
+                recognisedSpeech = str((r.recognize_google(audio, )))
 
                 if "audio" in recognisedSpeech:
                     ch = red("WM")
