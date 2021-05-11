@@ -1,37 +1,18 @@
-from Tkinter import *
 import sys
-sys.path.append("/path/to/script/file/directory/")
+import os
+from tkinter import *
 
-class App(Frame):
-    def run_script(self):
-        sys.stdout = self
-        ## sys.stderr = self
-        try:
-            del(sys.modules["test_script"])
-        except:
-            ## Yeah, it's a real ugly solution...
-            pass
-        import test_script
-        test_script.HelloWorld()
-        sys.stdout = sys.__stdout__
-        ## sys.stderr = __stderr__
+window = Tk()
 
-    def build_widgets(self):
-        self.text1 = Text(self)
-        self.text1.pack(side=TOP)
-        self.button = Button(self)
-        self.button["text"] = "Trigger script"
-        self.button["command"] = self.run_script
-        self.button.pack(side=TOP)
+window.title("Running Python Script")
+window.geometry('550x200')
 
-    def write(self, txt):
-        self.text1.insert(INSERT, txt)
 
-    def __init__(self, master=None):
-        Frame.__init__(self, master)
-        self.pack()
-        self.build_widgets()
+def run():
+    os.system('./AudioFormatDetectiveIMAP.py')
 
-root = Tk()
-app = App(master = root)
-app.mainloop()
+
+btn = Button(window, text="Click Me", bg="black", fg="white", command=run)
+btn.grid(column=0, row=0)
+
+window.mainloop()

@@ -187,7 +187,8 @@ def process_audio_files(currentFile):
             with srVoiceTestWav as source:
                 audio = r.record(source, duration=10)
 
-                # recognisedSpeech = str((r.recognize_wit(audio, key='RGAIIA26NIKLTR5PFPTMZM5MEHUC4MI3', show_all=False)))
+                # recognisedSpeech = str((r.recognize_wit(audio,
+                # key='RGAIIA26NIKLTR5PFPTMZM5MEHUC4MI3', show_all=False)))
                 recognisedSpeech = str((r.recognize_google(audio, )))
 
                 if "audio" in recognisedSpeech:

@@ -1,12 +1,12 @@
 #!/bin/bash
 
-source afd_venv/bin/activate
-LAST_AUDIOTOOLS_FILE='lib/python3.7/site-packages/audiotools/wavpack.py'
+python3 -m venv venv
+source venv/bin/activate
 
-if [ ! -f $LAST_AUDIOTOOLS_FILE ]; then
 cd audiotools-3.1.1/
 make install
-fi
+
+cd ..
 
 pip install --upgrade pip
 
