@@ -19,7 +19,6 @@ from multiprocessing import Process, Pool
 import multiprocessing
 import sys
 
-
 # Let's define some colours
 black = lambda text: '\033[0;30m' + text + '\033[0m'
 red = lambda text: '\033[0;31m' + text + '\033[0m'
@@ -54,9 +53,9 @@ def unzip():
                     with ZipFile(currentZipFile, 'r') as zipArchive:
                         try:
                             zipArchive.extractall(zipFolderName)
-                            print('Extracting...')
-                            print('Done!')
-                            print("")
+                            # print('Extracting...')
+                            # print('Done!')
+                            # print("")
                             os.remove(currentZipFile)
                         except Exception as e:
                             # print("zip file corrupt")
@@ -71,6 +70,7 @@ def unzip():
                                 # print("")
                             except:
                                 print("unable to remove __MACOSX hidden folder...")
+                    return True
                 except Exception as e:
                     print(e)
                     print("Unzip failed, zipfile may be corrupt")
@@ -237,42 +237,65 @@ def process_audio_files(currentFile):
 # Watch folder and run main function when a file is downloaded into folder
 
 
-class Event(LoggingEventHandler):
-    def on_moved(self, event):
-        # print(event)
-        if os.path.basename(os.path.normpath(event.src_path)).endswith(".crdownload"):
-            # print(event)
-            os.chdir(AJDownloadsFolder)
-            cwd = os.getcwd()
-            unzip()
-            clear()
-            print('\n' * 50)
-            print("analysing...")
-            time.sleep(1)
-            currentFileList = []
-            start = time.time()
+# class Event(LoggingEventHandler):
+#     def on_moved(self, event):
+#         # print(event)
+#         if os.path.basename(os.path.normpath(event.src_path)).endswith(".crdownload"):
+#             # print(event)
+#             os.chdir(AJDownloadsFolder)
+#             cwd = os.getcwd()
+#             unzip()
+#             clear()
+#             print('\n' * 50)
+#             print("analysing...")
+#             time.sleep(1)
+#             currentFileList = []
+#
+#             with Pool(processes=multiprocessing.cpu_count()) as pool:
+#                 for directory, subdirectories, files in os.walk(cwd):
+#                     for file in files:
+#                         tempCurrentFile = os.path.join(directory, file)
+#                         if tempCurrentFile.lower().endswith \
+#                                     ((".mp3", ".aac",
+#                                       ".aiff", ".aif", ".flac", ".m4a",
+#                                       ".m4p", ".wav",)) and not tempCurrentFile.startswith(".") \
+#                                 and os.path.isfile(tempCurrentFile):
+#                             currentFileList.append(tempCurrentFile)
+#
+#                 for currentFile in currentFileList:
+#                     pool.imap_unordered(process_audio_files, (currentFile,))
+#
+#                 pool.close()
+#                 pool.join()
+#                 print("All done!")
 
-            with Pool(processes=multiprocessing.cpu_count()) as pool:
-                for directory, subdirectories, files in os.walk(cwd):
-                    for file in files:
-                        tempCurrentFile = os.path.join(directory, file)
-                        if tempCurrentFile.lower().endswith \
-                                    ((".mp3", ".aac",
-                                      ".aiff", ".aif", ".flac", ".m4a",
-                                      ".m4p", ".wav",)) and not tempCurrentFile.startswith(".") \
-                                and os.path.isfile(tempCurrentFile):
-                            currentFileList.append(tempCurrentFile)
 
-                for currentFile in currentFileList:
-                    pool.imap_unordered(process_audio_files, (currentFile,))
+def os_walk():
+    # print(event)
+    os.chdir(AJDownloadsFolder)
+    cwd = os.getcwd()
+    if unzip():
 
-                pool.close()
-                pool.join()
-                end = time.time()
-                # print(end - start)
-                pTime = str("{:.2f}".format(end - start))
-                print('processed ' + str(len(currentFileList)) + ' files in ' + pTime + 's')
-                # print("All done!")
+        clear()
+        print('\n' * 50)
+        print("analysing...")
+        time.sleep(1)
+        currentFileList = []
+
+        for directory, subdirectories, files in os.walk(cwd):
+            for file in files:
+                tempCurrentFile = os.path.join(directory, file)
+                if tempCurrentFile.lower().endswith \
+                            ((".mp3", ".aac",
+                              ".aiff", ".aif", ".flac", ".m4a",
+                              ".m4p", ".wav",)) and not tempCurrentFile.startswith(".") \
+                        and os.path.isfile(tempCurrentFile):
+                    currentFileList.append(tempCurrentFile)
+
+        for currentFile in currentFileList:
+            process_audio_files(currentFile, )
+
+        print("All done!")
 
 
 if __name__ == "__main__":
@@ -294,13 +317,18 @@ if __name__ == "__main__":
     #                     format='%(asctime)s - %(message)s',
     #                     datefmt='%Y-%m-%d %H:%M:%S')
     path = sys.argv[1] if len(sys.argv) > 1 else '.'
-    event_handler = Event()
-    observer = Observer()
-    observer.schedule(event_handler, path, recursive=False)
-    observer.start()
+    # event_handler = Event()
+    # observer = Observer()
+    # observer.schedule(event_handler, path, recursive=False)
+    # observer.start()
     try:
         while True:
             time.sleep(1)
+            os_walk()
     except KeyboardInterrupt:
-        observer.stop()
-        observer.join()
+        print("Interrupt received, stopping...")
+    finally:
+        exit()
+
+    #     observer.stop()
+    # observer.join()
