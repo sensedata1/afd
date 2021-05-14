@@ -38,7 +38,8 @@ tar -xvzf audiotools-3.1.1.tar.gz
 pushd audiotools-3.1.1/
 make install clean BATCH=yes
 popd
-
+clear
+echo "Installing pip packages..."
 pip3 install --upgrade pip --quiet
 pip3 install --upgrade setuptools --quiet
 pip3 install -r requirements.txt --quiet
