@@ -33,19 +33,17 @@ fi
 
 python3 -m venv venv
 source venv/bin/activate
+echo "Installing audiotools..."
 tar -xvzf audiotools-3.1.1.tar.gz
 pushd audiotools-3.1.1/
-make install
+make install clean BATCH=yes
 popd
 
 pip3 install --upgrade pip
 pip3 install --upgrade setuptools
 pip3 install -r requirements.txt
-pip3 install eyed3
-pip3 install colors.py
-pip3 install SpeechRecognition
-pip3 install pydub
-pip3 install watchdog
+pip3 install --quiet eyed3 colors.py SpeechRecognition pydub watchdog
+
 
 cat << EOF > /usr/local/bin/afd
 source ${BASEDIR}/venv/bin/activate
