@@ -7,19 +7,25 @@ TOOLSPATH="/Library/Developer/CommandLineTools"
 
 echo "Installing AudioFormatDetective..."
 sleep 2
-echo "checking for OSX CommandLineTools..."
+echo "Checking for OSX CommandLineTools..."
 sleep 2
 
 if [[ $(xcode-select -p) != ${TOOLSPATH} ]]
     then
-    echo "no installation of CommandLineTools found, prompting to install..."
-    sleep 2
-    xcode-select --install
+        echo "No installation of CommandLineTools found, prompting to install..."
+        sleep 2
+        xcode-select --install
+        echo ""
+        echo ""
+        clear
+        echo "Pausing for CommandLineTools installation, please click the Install button on the popup"
+        read -n 1 -s -r -p "Press any key to continue once the installation is complete"
     else
-    echo "CommandLineTools found, proceeding..."
-    sleep 2
-    echo "make version = " $(make --version)
-    sleep 2
+        echo "CommandLineTools found, proceeding..."
+        sleep 2
+        echo ""
+        echo "make version = " $(make --version)
+        sleep 2
 fi
 
 python3 -m venv venv
