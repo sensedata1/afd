@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 
+
+TOOLSPATH="/Library/Developer/CommandLineTools"
 BASEDIR=$(dirname $0)
+AFDPATH="/usr/local/bin/afd"
+
 echo $BASEDIR
 cd $BASEDIR
-TOOLSPATH="/Library/Developer/CommandLineTools"
-
+clear
 echo "Installing AudioFormatDetective..."
 sleep 2
 echo "Checking for OSX CommandLineTools..."
@@ -56,9 +59,19 @@ EOF
 chmod a+x ~/Desktop/afd.command
 chmod a+x /usr/local/bin/afd
 
-clear
-echo "*************************************************************"
-echo "**   To use AudioFormatDetective, locate afd.command on    **"
-echo "**   the Desktop and double click to open. Alternatively   **"
-echo "**   open a terminal window, and type: afd                 **"
-echo "*************************************************************"
+if [[ $(which afd) == $AFDPATH ]]
+    then
+        echo "*************************************************************"
+        echo "*************** Installation succeeded!" ********************"
+        echo "*************************************************************"
+        echo ""
+        sleep 2
+        echo "*************************************************************"
+        echo "**   To use AudioFormatDetective, locate afd.command on    **"
+        echo "**   the Desktop and double click to open. Alternatively   **"
+        echo "**   open a terminal window, and type: afd                 **"
+        echo "*************************************************************"
+    else
+        echo "Arse! There was a problem with the installation, please call technical support :P"
+fi
+
