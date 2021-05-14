@@ -39,10 +39,10 @@ pushd audiotools-3.1.1/
 make install clean BATCH=yes
 popd
 
-pip3 install --upgrade pip
-pip3 install --upgrade setuptools
-pip3 install -r requirements.txt
-pip3 install --quiet eyed3 colors.py SpeechRecognition pydub watchdog
+pip3 install --upgrade pip --quiet
+pip3 install --upgrade setuptools --quiet
+pip3 install -r requirements.txt --quiet
+#pip3 install --quiet eyed3 colors.py SpeechRecognition pydub watchdog
 
 
 cat << EOF > /usr/local/bin/afd
@@ -59,6 +59,7 @@ chmod a+x /usr/local/bin/afd
 
 if [[ $(which afd) == $AFDPATH ]]
     then
+        clear
         echo "*************************************************************"
         echo "*************** Installation succeeded! *********************"
         echo "*************************************************************"
