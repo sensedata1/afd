@@ -62,7 +62,7 @@ chmod a+x /usr/local/bin/afd
 if [[ $(which afd) == $AFDPATH ]]
     then
         echo "*************************************************************"
-        echo "*************** Installation succeeded!" ********************"
+        echo "*************** Installation succeeded! *********************"
         echo "*************************************************************"
         echo ""
         sleep 2
