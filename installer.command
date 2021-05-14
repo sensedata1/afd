@@ -1,9 +1,27 @@
 #!/usr/bin/env bash
 
 BASEDIR=$(dirname $0)
-
 echo $BASEDIR
 cd $BASEDIR
+TOOLSPATH="/Library/Developer/CommandLineTools"
+
+echo "Installing AudioFormatDetective..."
+sleep 2
+echo "checking for OSX CommandLineTools..."
+sleep 2
+
+if [[ $(xcode-select -p) != ${TOOLSPATH} ]]
+    then
+    echo "no installation of CommandLineTools found, prompting to install..."
+    sleep 2
+    xcode-select --install
+    else
+    echo "CommandLineTools found, proceeding..."
+    sleep 2
+    echo "make version = " $(make --version)
+    sleep 2
+fi
+
 python3 -m venv venv
 source venv/bin/activate
 tar -xvzf audiotools-3.1.1.tar.gz
