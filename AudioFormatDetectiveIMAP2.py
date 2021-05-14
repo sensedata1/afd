@@ -29,9 +29,7 @@ magenta = lambda text: '\033[0;35m' + text + '\033[0m'
 cyan = lambda text: '\033[0;36m' + text + '\033[0m'
 white = lambda text: '\033[0;37m' + text + '\033[0m'
 
-# create global instance of speech_recognition
 r = sr.Recognizer()
-proceed = 1
 
 
 # Set up a "clear" with cross platform compatibility with Windows
@@ -226,46 +224,9 @@ def process_audio_files(currentFile):
         print(errorWav, sampleRate, bits, channels, ch, "         ", file)
 
 
-# Watch folder and run main function when a file is downloaded into folder
-
-
-# class Event(LoggingEventHandler):
-#     def on_moved(self, event):
-#         # print(event)
-#         if os.path.basename(os.path.normpath(event.src_path)).endswith(".crdownload"):
-#             # print(event)
-#             os.chdir(AJDownloadsFolder)
-#             cwd = os.getcwd()
-#             unzip()
-#             clear()
-#             print('\n' * 50)
-#             print("analysing...")
-#             time.sleep(1)
-#             currentFileList = []
-#
-#             with Pool(processes=multiprocessing.cpu_count()) as pool:
-#                 for directory, subdirectories, files in os.walk(cwd):
-#                     for file in files:
-#                         tempCurrentFile = os.path.join(directory, file)
-#                         if tempCurrentFile.lower().endswith \
-#                                     ((".mp3", ".aac",
-#                                       ".aiff", ".aif", ".flac", ".m4a",
-#                                       ".m4p", ".wav",)) and not tempCurrentFile.startswith(".") \
-#                                 and os.path.isfile(tempCurrentFile):
-#                             currentFileList.append(tempCurrentFile)
-#
-#                 for currentFile in currentFileList:
-#                     pool.imap_unordered(process_audio_files, (currentFile,))
-#
-#                 pool.close()
-#                 pool.join()
-#                 print("All done!")
-
-
 # Delete old files and folders
 class Event(LoggingEventHandler):
     def on_moved(self, event):
-        # print(event)
         os.chdir(AJDownloadsFolder)
         cwd = os.getcwd()
         currentFileList = []
@@ -289,7 +250,6 @@ class Event(LoggingEventHandler):
 
 
 def os_walk():
-    # print(event)
     os.chdir(AJDownloadsFolder)
     cwd = os.getcwd()
     if unzip():
@@ -297,7 +257,7 @@ def os_walk():
         clear()
         print('\n' * 50)
         print("analysing...")
-        time.sleep(1)
+        # time.sleep(1)
         currentFileList = []
         start = time.time()
 
@@ -320,7 +280,10 @@ def os_walk():
             end = time.time()
             pTime = str("{:.2f}".format(end - start))
             print('processed ' + str(len(currentFileList)) + ' files in ' + pTime + 's')
-            # print("All done!")
+            # To open the unzipped folder after processing uncomment below
+            # for directory, subdirectories, files in os.walk(cwd):
+            #     for subdirectory in subdirectories:
+            #         subprocess.Popen(["open", subdirectory])
 
 
 if __name__ == "__main__":
@@ -337,7 +300,7 @@ if __name__ == "__main__":
     print("Downloads folder = " + AJDownloadsFolder)
     print("")
     print("Monitoring " + AJDownloadsFolder + "...")
-
+    # Uncomment to enable logging
     # logging.basicConfig(level=logging.INFO,
     #                     format='%(asctime)s - %(message)s',
     #                     datefmt='%Y-%m-%d %H:%M:%S')
@@ -348,7 +311,7 @@ if __name__ == "__main__":
     observer.start()
     try:
         while True:
-            time.sleep(1)
+            time.sleep(0.1)
             os_walk()
     except KeyboardInterrupt:
         print("Interrupt received, stopping...")
