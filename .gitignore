@@ -1,3 +1,5 @@
 **/afd_venv
-**/audiotools*
+**/audiotools/build*
 **/.idea*
+**/venv
+**/audiotools*/

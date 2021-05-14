@@ -1,0 +1,70 @@
+.TH "AUDIOTOOLS.CFG" 5 "April 2021" "" "Audio Tools Config File"
+.SH NAME
+audiotools.cfg \- configuration data for Python Audio Tools
+.SH DESCRIPTION
+.PP
+The format of this file consists of one or more sections. Each section contains one or more key / value pairs.
+.SH CONFIGURATION ITEMS
+.TS
+tab(:);
+l l l.
+\fBb'Section'\fR:\fBb'Key'\fR:\fBb'Value'\fR
+_
+b'[System]':b'default_type':b'the default audio type to use'
+\^:b'cdrom':b'the default CD-ROM device to use'
+\^:b'cdrom_read_offset':b'read sample offset to apply'
+\^:b'cdrom_write_offset':b'write sample offset to apply'
+\^:b'fs_encoding':b'text encoding for filenames'
+\^:b'io_encoding':b'text encoding for terminal output'
+\^:b'maximum_jobs':b'default for the -j option'
+_
+b'[Defaults]':b'verbosity':b'"normal", "debug" or "quiet"'
+_
+b'[Filenames]':b'format':b'default for the --format option'
+_
+b'[Quality]':b'flac':b'default quality for FLAC encoding'
+\^:b'mp3':b'default quality for MP3 encoding'
+\^:b'...':b'default quality for a given type'
+_
+b'[Binaries]':b'oggenc':b'binary to use for Vorbis encoding'
+\^:b'lame':b'binary to use for MP3 encoding'
+\^:b'...':b'binary to use other than default'
+_
+b'[Thumbnail]':b'format':b'"jpeg", "png", "gif", etc.'
+\^:b'size':b'maximum size of each thumbnail'
+_
+b'[ID3]':b'id3v2':b'id3v2.2, id3v2.3, id3v2.4 or none'
+\^:b'id3v1':b'"id3v1.1" or "none"'
+\^:b'pad':b'if "true", track numbers like "01"'
+\^:\^:b'if "false", track numbers like "1"'
+_
+b'[MusicBrainz]':b'server':b'default MusicBrainz hostname'
+\^:b'port':b'default MusicBrainz port'
+_
+b'[FreeDB]':b'server':b'default FreeDB hostname'
+\^:b'port':b'default FreeDB port'
+.TE
+.SH SEE ALSO
+.BR audiotools-config (1),
+.BR cdda2track (1),
+.BR cddainfo (1),
+.BR cddaplay (1),
+.BR coverdump (1),
+.BR covertag (1),
+.BR coverview (1),
+.BR dvda2track (1),
+.BR dvdainfo (1),
+.BR track2cdda (1),
+.BR track2track (1),
+.BR trackcat (1),
+.BR trackcmp (1),
+.BR trackinfo (1),
+.BR tracklength (1),
+.BR tracklint (1),
+.BR trackplay (1),
+.BR trackrename (1),
+.BR tracksplit (1),
+.BR tracktag (1),
+.BR trackverify (1)
+.SH AUTHOR
+Brian Langenberger

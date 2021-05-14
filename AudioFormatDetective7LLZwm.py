@@ -252,7 +252,7 @@ class Event(LoggingEventHandler):
             # print(event)
             os.chdir(AJDownloadsFolder)
             cwd = os.getcwd()
-            #unzip()
+            # unzip()
             clear()
             print('\n' * 50)
             print("analysing...")
@@ -273,7 +273,7 @@ class Event(LoggingEventHandler):
 
                 for currentFile in currentFileList:
                     if not currentFile.startswith("_I_"):
-                     pool.imap_unordered(process_audio_files, (currentFile,))
+                        pool.imap_unordered(process_audio_files, (currentFile,))
 
                 pool.close()
                 pool.join()
@@ -286,7 +286,7 @@ if __name__ == "__main__":
     eyed3.log.setLevel("ERROR")
     # Get AJ Downloads folder from user input
     userFolder = input("Drag your AJ downloads folder here and press enter...")
-    #userFolder = '/Volumes/ProjectsDrive/General\ Downloads/AJ\ TEMP\ DOWNLOADS'
+    # userFolder = '/Volumes/ProjectsDrive/General\ Downloads/AJ\ TEMP\ DOWNLOADS'
     # Format the user input
     tempVar = userFolder.replace("\\", "")
     tempVar2 = tempVar.rstrip()
@@ -296,7 +296,7 @@ if __name__ == "__main__":
     print("")
     print("Monitoring " + AJDownloadsFolder + "...")
 
-    #logging.basicConfig(level=logging.INFO,
+    # logging.basicConfig(level=logging.INFO,
     #                    format='%(asctime)s - %(message)s',
     #                    datefmt='%Y-%m-%d %H:%M:%S')
     path = sys.argv[1] if len(sys.argv) > 1 else '.'
