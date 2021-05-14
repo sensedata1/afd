@@ -1,3 +1,6 @@
 # afd
 
-Initial commit
+macos installer for AudioFormatDetective
+double click installer.command to install.
+
+

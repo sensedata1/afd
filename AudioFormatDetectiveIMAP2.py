@@ -240,13 +240,15 @@ class Event(LoggingEventHandler):
                         currentFileList.append(tempCurrentFile)
                 for subdirectory in subdirectories:
                     currentDirList.append(subdirectory)
-
-            for currentFile in currentFileList:
-                if not currentFile.lower().endswith('.zip'):
-                    os.remove(currentFile)
-            for currentDir in currentDirList:
-                if os.path.exists(currentDir) and os.path.isdir(currentDir):
-                    shutil.rmtree(currentDir)
+            try:
+                for currentFile in currentFileList:
+                    if not currentFile.lower().endswith('.zip'):
+                        os.remove(currentFile)
+                for currentDir in currentDirList:
+                    if os.path.exists(currentDir) and os.path.isdir(currentDir):
+                        shutil.rmtree(currentDir)
+            except Exception as e:
+                print(e)
 
 
 def os_walk():
