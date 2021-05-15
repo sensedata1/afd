@@ -283,9 +283,9 @@ def os_walk():
             pTime = str("{:.2f}".format(end - start))
             print('processed ' + str(len(currentFileList)) + ' files in ' + pTime + 's')
             # To open the unzipped folder after processing uncomment below
-            # for directory, subdirectories, files in os.walk(cwd):
-            #     for subdirectory in subdirectories:
-            #         subprocess.Popen(["open", subdirectory])
+            for directory, subdirectories, files in os.walk(cwd):
+                for subdirectory in subdirectories:
+                    subprocess.Popen(["open", subdirectory])
 
 
 if __name__ == "__main__":
