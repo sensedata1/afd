@@ -294,6 +294,8 @@ if __name__ == "__main__":
     eyed3.log.setLevel("ERROR")
     # Get AJ Downloads folder from user input
     userFolder = input("Drag your AJ downloads folder here and press enter...")
+    f = open("folder.txt", "w")
+    f.write(str(os.path.abspath(userFolder)))
     # Format the user input
     tempVar = userFolder.replace("\\", "")
     tempVar2 = tempVar.rstrip()
