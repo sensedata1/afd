@@ -51,12 +51,18 @@ source ${BASEDIR}/venv/bin/activate
 python3 ${BASEDIR}/AudioFormatDetectiveIMAP2.py
 EOF
 
+cat << EOF > /usr/local/bin/afd-lite
+source ${BASEDIR}/venv/bin/activate
+python3 ${BASEDIR}/AudioFormatDetectiveIMAP.py
+EOF
+
 cat << EOF > ~/Desktop/afd.command
 afd
 EOF
 
 chmod a+x ~/Desktop/afd.command
 chmod a+x /usr/local/bin/afd
+chmod a+x /usr/local/bin/afd-lite
 
 if [[ $(which afd) == $AFDPATH ]]
     then

@@ -322,72 +322,14 @@ def os_walk_pop():
 
 
 if __name__ == "__main__":
-    multiprocessing.set_start_method('spawn')
+    multiprocessing.set_start_method('fork')
     clear()
     eyed3.log.setLevel("ERROR")
-    pathname = os.path.dirname(sys.argv[0])
-    saveFile = "folder.txt"
-    saveFilePath = os.path.join(pathname, saveFile)
-    print("1) Popup finder windows after unzipping and processing? ...or ")
-    print("2) No popups")
-    while True:
-        try:
-            popNum = int(input("Choose 1 or 2 and hit enter... "))
-            if popNum < 1 or popNum > 2:
-                raise ValueError  # this will send it to the print message and back to the input option
-            break
-        except ValueError:
-            print("Invalid integer. The number must be either 1 or 2.")
-    if popNum == 1:
-        print("You selected " + str(popNum) + " Finder windows will popup")
-    elif popNum == 2:
-        print("You selected " + str(popNum) + " No popups")
-
-    if os.path.exists(saveFilePath):
-        f = open(saveFilePath, "r")
-        AJDownloadsFolderTemp = f.read()
-        AJDownloadsFolder = Path(AJDownloadsFolderTemp.replace('\'', ''))
-        f.close()
-        print("Found saved downloads folder " + str(AJDownloadsFolder))
-        response = input("Hit \'Enter\' to continue with saved folder or hit any other key then Enter to change it ")
-        if response.lower() == "":
-            f = open(saveFilePath, "r")
-            AJDownloadsFolder = Path(AJDownloadsFolderTemp.replace('\'', ''))
-            f.close()
-            os.chdir(AJDownloadsFolder)
-            print("Downloads folder = " + str(AJDownloadsFolder))
-            print("")
-            print("Monitoring " + str(AJDownloadsFolder) + "...")
-
-        else:
-            clear()
-            userFolder = input("Drag your AJ downloads folder here and press enter...")
-            # Format the user input
-            tempVar = userFolder.replace("\\", "")
-            tempVar2 = tempVar.rstrip()
-            AJDownloadsFolder = os.path.abspath(tempVar2)
-            f = open(saveFilePath, "w")
-            f.write(repr(AJDownloadsFolder))
-            f.close()
-            os.chdir(AJDownloadsFolder)
-            print("Downloads folder = " + str(AJDownloadsFolder))
-            print("")
-            print("Monitoring " + str(AJDownloadsFolder) + "...")
-
-    else:
-        clear()
-        userFolder = input("Drag your AJ downloads folder here and press enter...")
-        # Format the user input
-        tempVar = userFolder.replace("\\", "")
-        tempVar2 = tempVar.rstrip()
-        AJDownloadsFolder = os.path.abspath(tempVar2)
-        f = open(saveFilePath, "w")
-        f.write(repr(AJDownloadsFolder))
-        f.close()
-        os.chdir(AJDownloadsFolder)
-        print("Downloads folder = " + str(AJDownloadsFolder))
-        print("")
-        print("Monitoring " + str(AJDownloadsFolder + "..."))
+    AJDownloadsFolder = os.path.abspath("/AJTEMP")
+    os.chdir(AJDownloadsFolder)
+    print("Downloads folder = " + AJDownloadsFolder)
+    print("")
+    print("Monitoring " + AJDownloadsFolder + "...")
 
     # Uncomment to enable logging
     # logging.basicConfig(level=logging.INFO,
@@ -401,10 +343,7 @@ if __name__ == "__main__":
     try:
         while True:
             time.sleep(0.1)
-            if popNum == 2:
-                os_walk()
-            elif popNum == 1:
-                os_walk_pop()
+            os_walk()
     except KeyboardInterrupt:
         print("Interrupt received, stopping...")
     finally:
