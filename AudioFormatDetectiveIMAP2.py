@@ -282,28 +282,113 @@ def os_walk():
             end = time.time()
             pTime = str("{:.2f}".format(end - start))
             print('processed ' + str(len(currentFileList)) + ' files in ' + pTime + 's')
-            # To open the unzipped folder after processing uncomment below
-            # for directory, subdirectories, files in os.walk(cwd):
-            #     for subdirectory in subdirectories:
-            #         subprocess.Popen(["open", subdirectory])
+
+
+def os_walk_pop():
+    os.chdir(AJDownloadsFolder)
+    cwd = os.getcwd()
+    if unzip():
+
+        clear()
+        print('\n' * 50)
+        print("analysing...")
+        # time.sleep(1)
+        currentFileList = []
+        start = time.time()
+
+        with Pool(processes=multiprocessing.cpu_count()) as pool:
+            for directory, subdirectories, files in os.walk(cwd):
+                for file in files:
+                    tempCurrentFile = os.path.join(directory, file)
+                    if tempCurrentFile.lower().endswith \
+                                ((".mp3", ".aac",
+                                  ".aiff", ".aif", ".flac", ".m4a",
+                                  ".m4p", ".wav",)) and not tempCurrentFile.startswith(".") \
+                            and os.path.isfile(tempCurrentFile):
+                        currentFileList.append(tempCurrentFile)
+
+            for currentFile in currentFileList:
+                pool.imap_unordered(process_audio_files, (currentFile,))
+
+            pool.close()
+            pool.join()
+            end = time.time()
+            pTime = str("{:.2f}".format(end - start))
+            print('processed ' + str(len(currentFileList)) + ' files in ' + pTime + 's')
+            # Popup the unzipped folder after processing
+            for directory, subdirectories, files in os.walk(cwd):
+                for subdirectory in subdirectories:
+                    subprocess.Popen(["open", subdirectory])
 
 
 if __name__ == "__main__":
     multiprocessing.set_start_method('spawn')
-    # Suppress warnings from eyeD3
+    clear()
     eyed3.log.setLevel("ERROR")
-    # Get AJ Downloads folder from user input
-    userFolder = input("Drag your AJ downloads folder here and press enter...")
-    f = open("folder.txt", "w")
-    f.write(str(os.path.abspath(userFolder)))
-    # Format the user input
-    tempVar = userFolder.replace("\\", "")
-    tempVar2 = tempVar.rstrip()
-    AJDownloadsFolder = os.path.abspath(tempVar2)
-    os.chdir(AJDownloadsFolder)
-    print("Downloads folder = " + AJDownloadsFolder)
-    print("")
-    print("Monitoring " + AJDownloadsFolder + "...")
+    pathname = os.path.dirname(sys.argv[0])
+    saveFile = "folder.txt"
+    saveFilePath = os.path.join(pathname, saveFile)
+    print("1) Popup finder windows after unzipping and processing? ...or ")
+    print("2) No popups")
+    while True:
+        try:
+            popNum = int(input("Choose 1 or 2 and hit enter... "))
+            if popNum < 1 or popNum > 2:
+                raise ValueError  # this will send it to the print message and back to the input option
+            break
+        except ValueError:
+            print("Invalid integer. The number must be either 1 or 2.")
+    if popNum == 1:
+        print("You selected " + str(popNum) + " Finder windows will popup")
+    elif popNum == 2:
+        print("You selected " + str(popNum) + " No popups")
+
+    if os.path.exists(saveFilePath):
+        f = open(saveFilePath, "r")
+        AJDownloadsFolderTemp = f.read()
+        AJDownloadsFolder = Path(AJDownloadsFolderTemp.replace('\'', ''))
+        f.close()
+        print("Found saved downloads folder " + str(AJDownloadsFolder))
+        response = input("Hit \'Enter\' to continue with saved folder or hit any other key then Enter to change it ")
+        if response.lower() == "":
+            f = open(saveFilePath, "r")
+            AJDownloadsFolder = Path(AJDownloadsFolderTemp.replace('\'', ''))
+            f.close()
+            os.chdir(AJDownloadsFolder)
+            print("Downloads folder = " + str(AJDownloadsFolder))
+            print("")
+            print("Monitoring " + str(AJDownloadsFolder) + "...")
+
+        else:
+            clear()
+            userFolder = input("Drag your AJ downloads folder here and press enter...")
+            # Format the user input
+            tempVar = userFolder.replace("\\", "")
+            tempVar2 = tempVar.rstrip()
+            AJDownloadsFolder = os.path.abspath(tempVar2)
+            f = open(saveFilePath, "w")
+            f.write(repr(AJDownloadsFolder))
+            f.close()
+            os.chdir(AJDownloadsFolder)
+            print("Downloads folder = " + str(AJDownloadsFolder))
+            print("")
+            print("Monitoring " + str(AJDownloadsFolder) + "...")
+
+    else:
+        clear()
+        userFolder = input("Drag your AJ downloads folder here and press enter...")
+        # Format the user input
+        tempVar = userFolder.replace("\\", "")
+        tempVar2 = tempVar.rstrip()
+        AJDownloadsFolder = os.path.abspath(tempVar2)
+        f = open(saveFilePath, "w")
+        f.write(repr(AJDownloadsFolder))
+        f.close()
+        os.chdir(AJDownloadsFolder)
+        print("Downloads folder = " + str(AJDownloadsFolder))
+        print("")
+        print("Monitoring " + str(AJDownloadsFolder + "..."))
+
     # Uncomment to enable logging
     # logging.basicConfig(level=logging.INFO,
     #                     format='%(asctime)s - %(message)s',
@@ -316,7 +401,10 @@ if __name__ == "__main__":
     try:
         while True:
             time.sleep(0.1)
-            os_walk()
+            if popNum == 2:
+                os_walk()
+            elif popNum == 1:
+                os_walk_pop()
     except KeyboardInterrupt:
         print("Interrupt received, stopping...")
     finally:
