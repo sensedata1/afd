@@ -17,4 +17,4 @@ RUN apt-get -y install ffmpeg
 RUN chmod a+x docker-build-script.sh && ./docker-build-script.sh
 RUN mkdir /AJTEMP
 
-CMD source venv/bin/activate && python AudioFormatDetectiveIMAP2CON.py
+CMD python AudioFormatDetectiveIMAP2CON.py

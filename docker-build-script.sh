@@ -7,8 +7,8 @@ make install
 cd .. || exit
 rm -rf audiotools-3.1.1
 
-python -m venv venv
-source venv/bin/activate
+#python -m venv venv
+#source venv/bin/activate
 
 clear
 echo "Installing pip packages..."
