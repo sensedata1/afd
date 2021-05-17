@@ -31,7 +31,6 @@ white = lambda text: '\033[0;37m' + text + '\033[0m'
 
 r = sr.Recognizer()
 
-
 # Set up a "clear" with cross platform compatibility with Windows
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -51,6 +50,7 @@ def unzip():
                 try:
                     with ZipFile(currentZipFile, 'r') as zipArchive:
                         try:
+                            time.sleep(1)
                             zipArchive.extractall(zipFolderName)
                             # print('Extracting...')
                             # print('Done!')
@@ -60,7 +60,6 @@ def unzip():
                             # print("zip file corrupt")
                             print("Zip already extracted?")
                             print(e)
-
                         hiddenFolder = (os.path.join(zipFolderName, "__MACOSX"))
                         if os.path.isdir(hiddenFolder):
                             try:
@@ -78,7 +77,6 @@ def unzip():
 def process_audio_files(currentFile):
     eyed3.log.setLevel("ERROR")
     curPath, file = os.path.split(currentFile)
-
     if currentFile.lower().endswith((".mp3",)) and not currentFile.startswith(".") \
             and os.path.isfile(currentFile):
         try:
@@ -106,7 +104,6 @@ def process_audio_files(currentFile):
             bits = (audiotools.open(currentFile).bits_per_sample())
         except Exception as e:
             bits = "  "
-
         # convert mp3 to wav for voice recognition
         home = str(Path.home())
         src = currentFile
@@ -117,9 +114,7 @@ def process_audio_files(currentFile):
         srVoiceTestWav = sr.AudioFile(dst)
         try:
             with srVoiceTestWav as source:
-
                 audio = r.record(source, duration=10)
-
                 recognisedSpeech = str((r.recognize_google(audio)))
                 if "audio" or "jungle" or "audiojungle" in recognisedSpeech:
                     ch = red("WM")
@@ -133,7 +128,6 @@ def process_audio_files(currentFile):
             ch = "  "
             wm = "nowm"
             recognisedSpeech = ''
-
         if channels.lower() == "joint stereo" or "stereo":
             channels = 2
         try:
@@ -181,7 +175,6 @@ def process_audio_files(currentFile):
                 # recognisedSpeech = str((r.recognize_wit(audio,
                 # key='RGAIIA26NIKLTR5PFPTMZM5MEHUC4MI3', show_all=False)))
                 recognisedSpeech = str((r.recognize_google(audio, )))
-
                 if "audio" in recognisedSpeech:
                     ch = red("WM")
                 if "jungle" in recognisedSpeech:
@@ -191,7 +184,6 @@ def process_audio_files(currentFile):
                 else:
                     ch = "  "
         except Exception as e:
-
             ch = "  "
             wm = "nowm"
             recognisedSpeech = ''
@@ -226,7 +218,7 @@ def process_audio_files(currentFile):
 
 # Delete old files and folders
 class Event(LoggingEventHandler):
-    def on_created(self, event):
+    def on_any_event(self, event):
         # print(event)
         os.chdir(AJDownloadsFolder)
         cwd = os.getcwd()
@@ -248,7 +240,6 @@ class Event(LoggingEventHandler):
                 for currentDir in currentDirList:
                     if os.path.exists(currentDir) and os.path.isdir(currentDir):
                         shutil.rmtree(currentDir)
-                time.sleep(1)
             except Exception as e:
                 print(e)
 
@@ -257,14 +248,12 @@ def os_walk():
     os.chdir(AJDownloadsFolder)
     cwd = os.getcwd()
     if unzip():
-
         clear()
         print('\n' * 50)
         print("analysing...")
         # time.sleep(1)
         currentFileList = []
         start = time.time()
-
         with Pool(processes=multiprocessing.cpu_count()) as pool:
             for directory, subdirectories, files in os.walk(cwd):
                 for file in files:
@@ -275,52 +264,13 @@ def os_walk():
                                   ".m4p", ".wav",)) and not tempCurrentFile.startswith(".") \
                             and os.path.isfile(tempCurrentFile):
                         currentFileList.append(tempCurrentFile)
-
             for currentFile in currentFileList:
                 pool.imap_unordered(process_audio_files, (currentFile,))
-
             pool.close()
             pool.join()
             end = time.time()
             pTime = str("{:.2f}".format(end - start))
             print('processed ' + str(len(currentFileList)) + ' files in ' + pTime + 's')
-
-
-def os_walk_pop():
-    os.chdir(AJDownloadsFolder)
-    cwd = os.getcwd()
-    if unzip():
-
-        clear()
-        print('\n' * 50)
-        print("analysing...")
-        # time.sleep(1)
-        currentFileList = []
-        start = time.time()
-
-        with Pool(processes=multiprocessing.cpu_count()) as pool:
-            for directory, subdirectories, files in os.walk(cwd):
-                for file in files:
-                    tempCurrentFile = os.path.join(directory, file)
-                    if tempCurrentFile.lower().endswith \
-                                ((".mp3", ".aac",
-                                  ".aiff", ".aif", ".flac", ".m4a",
-                                  ".m4p", ".wav",)) and not tempCurrentFile.startswith(".") \
-                            and os.path.isfile(tempCurrentFile):
-                        currentFileList.append(tempCurrentFile)
-
-            for currentFile in currentFileList:
-                pool.imap_unordered(process_audio_files, (currentFile,))
-
-            pool.close()
-            pool.join()
-            end = time.time()
-            pTime = str("{:.2f}".format(end - start))
-            print('processed ' + str(len(currentFileList)) + ' files in ' + pTime + 's')
-            # Popup the unzipped folder after processing
-            for directory, subdirectories, files in os.walk(cwd):
-                for subdirectory in subdirectories:
-                    subprocess.Popen(["open", subdirectory])
 
 
 if __name__ == "__main__":
@@ -348,6 +298,5 @@ if __name__ == "__main__":
         print("Interrupt received, stopping...")
     finally:
         exit()
-
         observer.stop()
     observer.join()

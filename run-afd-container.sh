@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
-#read -p "Drop downloads folder here" AJTEMP
-docker run \
-       -v \
-       /Users/blordnew/Downloads/AJ\ TEMP\ DOWNLOADS:/AJTEMP \
-       -it sensedata1/afd:latest \
-       python AudioFormatDetectiveIMAP2CON.py
 
+docker pull sensedata1/afd:latest
+if [[ $? == 0 ]];
+then
+    read -p "Drop your AJ downloads folder here... " AJTEMP
+    echo ${AJTEMP}
+    docker run \
+           -v "${AJTEMP}":/AJTEMP \
+           -it sensedata1/afd:latest
+    #       python AudioFormatDetectiveIMAP2CON.py
+else
+    echo "Image pull unsuccessful, exiting"
+    break
+fi

@@ -1,0 +1,10 @@
+**/.git/
+**/.gitignore
+AudioFormatDetectiveIMAP.py
+AudioFormatDetectiveIMAP2.py
+AudioFormatDetective7LLZwm.py
+**/audiotools-3.1.1/
+installer.command
+README.md
+run-afd-container.sh
+**/venv/
