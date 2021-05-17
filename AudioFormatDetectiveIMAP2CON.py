@@ -279,7 +279,7 @@ if __name__ == "__main__":
     eyed3.log.setLevel("ERROR")
     AJDownloadsFolder = os.path.abspath("/AJTEMP")
     os.chdir(AJDownloadsFolder)
-    print("Monitoring internal container directory" + AJDownloadsFolder + "...")
+    print("Monitoring internal container directory " + AJDownloadsFolder + "...")
 
     # Uncomment to enable logging
     # logging.basicConfig(level=logging.INFO,
