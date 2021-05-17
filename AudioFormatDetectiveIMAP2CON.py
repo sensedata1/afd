@@ -248,6 +248,7 @@ class Event(LoggingEventHandler):
                 for currentDir in currentDirList:
                     if os.path.exists(currentDir) and os.path.isdir(currentDir):
                         shutil.rmtree(currentDir)
+                time.sleep(1)
             except Exception as e:
                 print(e)
 
@@ -328,9 +329,7 @@ if __name__ == "__main__":
     eyed3.log.setLevel("ERROR")
     AJDownloadsFolder = os.path.abspath("/AJTEMP")
     os.chdir(AJDownloadsFolder)
-    print("Downloads folder = " + AJDownloadsFolder)
-    print("")
-    print("Monitoring " + AJDownloadsFolder + "...")
+    print("Monitoring internal container directory" + AJDownloadsFolder + "...")
 
     # Uncomment to enable logging
     # logging.basicConfig(level=logging.INFO,
@@ -343,7 +342,7 @@ if __name__ == "__main__":
     observer.start()
     try:
         while True:
-            time.sleep(0.1)
+            time.sleep(1)
             os_walk()
     except KeyboardInterrupt:
         print("Interrupt received, stopping...")
