@@ -226,7 +226,7 @@ def process_audio_files(currentFile):
 
 # Delete old files and folders
 class Event(LoggingEventHandler):
-    def on_moved(self, event):
+    def on_any_event(self, event):
         print(event)
         os.chdir(AJDownloadsFolder)
         cwd = os.getcwd()
