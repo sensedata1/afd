@@ -31,7 +31,7 @@ white = lambda text: '\033[0;37m' + text + '\033[0m'
 
 r = sr.Recognizer()
 
-# Set up a "clear" with cross platform compatibility with Windows
+
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -52,12 +52,8 @@ def unzip():
                         try:
                             time.sleep(1)
                             zipArchive.extractall(zipFolderName)
-                            # print('Extracting...')
-                            # print('Done!')
-                            # print("")
                             os.remove(currentZipFile)
                         except Exception as e:
-                            # print("zip file corrupt")
                             print("Zip already extracted?")
                             print(e)
                         hiddenFolder = (os.path.join(zipFolderName, "__MACOSX"))
@@ -65,7 +61,6 @@ def unzip():
                             try:
                                 shutil.rmtree(hiddenFolder)
                                 print("Found and removed __MACOSX hidden folder...")
-                                # print("")
                             except:
                                 print("unable to remove __MACOSX hidden folder...")
                     return True
@@ -251,7 +246,6 @@ def os_walk():
         clear()
         print('\n' * 50)
         print("analysing...")
-        # time.sleep(1)
         currentFileList = []
         start = time.time()
         with Pool(processes=multiprocessing.cpu_count()) as pool:
