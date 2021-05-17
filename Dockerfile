@@ -1,6 +1,8 @@
 FROM python
 COPY . /app
 WORKDIR /app
+RUN rm -rf venv/
+RUN rm -rf audiotools-3.1.1/
 RUN apt-get update && apt-get install -y apt-utils
 # wget https://downloads.sourceforge.net/project/audiotools/audiotools/3.1.1/audiotools-3.1.1.tar.gz
 # tar -xvzf audiotools-3.1.1.tar.gz
