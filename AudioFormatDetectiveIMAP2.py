@@ -56,7 +56,6 @@ def unzip():
                         except Exception as e:
                             print("Zip already extracted?")
                             print(e)
-
                         hiddenFolder = (os.path.join(zipFolderName, "__MACOSX"))
                         if os.path.isdir(hiddenFolder):
                             try:
@@ -73,7 +72,6 @@ def unzip():
 def process_audio_files(currentFile):
     eyed3.log.setLevel("ERROR")
     curPath, file = os.path.split(currentFile)
-
     if currentFile.lower().endswith((".mp3",)) and not currentFile.startswith(".") \
             and os.path.isfile(currentFile):
         try:
@@ -101,7 +99,6 @@ def process_audio_files(currentFile):
             bits = (audiotools.open(currentFile).bits_per_sample())
         except Exception as e:
             bits = "  "
-
         # convert mp3 to wav for voice recognition
         home = str(Path.home())
         src = currentFile
@@ -173,7 +170,6 @@ def process_audio_files(currentFile):
                 # recognisedSpeech = str((r.recognize_wit(audio,
                 # key='RGAIIA26NIKLTR5PFPTMZM5MEHUC4MI3', show_all=False)))
                 recognisedSpeech = str((r.recognize_google(audio, )))
-
                 if "audio" in recognisedSpeech:
                     ch = red("WM")
                 if "jungle" in recognisedSpeech:
