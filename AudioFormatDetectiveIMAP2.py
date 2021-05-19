@@ -18,6 +18,7 @@ from watchdog.observers import Observer
 from multiprocessing import Process, Pool
 import multiprocessing
 import sys
+from re import search
 
 # Let's define some colours
 black = lambda text: '\033[0;30m' + text + '\033[0m'
@@ -51,6 +52,7 @@ def unzip():
                 try:
                     with ZipFile(currentZipFile, 'r') as zipArchive:
                         try:
+                            time.sleep(1)
                             zipArchive.extractall(zipFolderName)
                             # print('Extracting...')
                             # print('Done!')
@@ -226,7 +228,7 @@ def process_audio_files(currentFile):
 
 # Delete old files and folders
 class Event(LoggingEventHandler):
-    def on_moved(self, event):
+    def on_any_event(self, event):
         os.chdir(AJDownloadsFolder)
         cwd = os.getcwd()
         currentFileList = []
@@ -282,6 +284,12 @@ def os_walk():
             end = time.time()
             pTime = str("{:.2f}".format(end - start))
             print('processed ' + str(len(currentFileList)) + ' files in ' + pTime + 's')
+            # print(repr(currentFileList).lower())
+            if search('(tails|kit)', repr(currentFileList).lower()):
+                print("Probably a kit, leaving files where they are")
+            else:
+                for currentFile in currentFileList:
+                    shutil.move(currentFile, os.path.join(AJDownloadsFolder, os.path.basename(currentFile)))
 
 
 def os_walk_pop():
