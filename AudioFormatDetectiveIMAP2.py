@@ -44,22 +44,16 @@ def unzip():
     # Look for zip files and unzip then remove
     for directory, subdirectories, files in os.walk(cwd):
         for file in files:
-            # print(file) Debugging output
             if file.lower().endswith((".zip",)) and os.path.isfile(os.path.join(directory, file)):
                 currentZipFile = os.path.join(directory, file)
                 zipFolderName = os.path.splitext(currentZipFile)[0]
-                # print(file)
                 try:
                     with ZipFile(currentZipFile, 'r') as zipArchive:
                         try:
                             time.sleep(1)
                             zipArchive.extractall(zipFolderName)
-                            # print('Extracting...')
-                            # print('Done!')
-                            # print("")
                             os.remove(currentZipFile)
                         except Exception as e:
-                            # print("zip file corrupt")
                             print("Zip already extracted?")
                             print(e)
 
@@ -68,7 +62,6 @@ def unzip():
                             try:
                                 shutil.rmtree(hiddenFolder)
                                 print("Found and removed __MACOSX hidden folder...")
-                                # print("")
                             except:
                                 print("unable to remove __MACOSX hidden folder...")
                     return True
@@ -119,9 +112,7 @@ def process_audio_files(currentFile):
         srVoiceTestWav = sr.AudioFile(dst)
         try:
             with srVoiceTestWav as source:
-
                 audio = r.record(source, duration=10)
-
                 recognisedSpeech = str((r.recognize_google(audio)))
                 if "audio" or "jungle" or "audiojungle" in recognisedSpeech:
                     ch = red("WM")
@@ -135,7 +126,6 @@ def process_audio_files(currentFile):
             ch = "  "
             wm = "nowm"
             recognisedSpeech = ''
-
         if channels.lower() == "joint stereo" or "stereo":
             channels = 2
         try:
@@ -143,7 +133,7 @@ def process_audio_files(currentFile):
         except:
             rate = "err"
         vbrTrueFalse = "  "
-        if sampleRate == 44100 and channels == 2 and 325 > rate > 315:  # and wm != "wmd":
+        if sampleRate == 44100 and channels == 2 and 325 > rate > 315:
             errorMp3 = green(" [ok]")
         else:
             errorMp3 = red("[ERR]")
@@ -257,14 +247,11 @@ def os_walk():
     os.chdir(AJDownloadsFolder)
     cwd = os.getcwd()
     if unzip():
-
         clear()
         print('\n' * 50)
         print("analysing...")
-        # time.sleep(1)
         currentFileList = []
         start = time.time()
-
         with Pool(processes=multiprocessing.cpu_count()) as pool:
             for directory, subdirectories, files in os.walk(cwd):
                 for file in files:
@@ -275,10 +262,8 @@ def os_walk():
                                   ".m4p", ".wav",)) and not tempCurrentFile.startswith(".") \
                             and os.path.isfile(tempCurrentFile):
                         currentFileList.append(tempCurrentFile)
-
             for currentFile in currentFileList:
                 pool.imap_unordered(process_audio_files, (currentFile,))
-
             pool.close()
             pool.join()
             end = time.time()
@@ -298,14 +283,11 @@ def os_walk_pop():
     os.chdir(AJDownloadsFolder)
     cwd = os.getcwd()
     if unzip():
-
         clear()
         print('\n' * 50)
         print("analysing...")
-        # time.sleep(1)
         currentFileList = []
         start = time.time()
-
         with Pool(processes=multiprocessing.cpu_count()) as pool:
             for directory, subdirectories, files in os.walk(cwd):
                 for file in files:
@@ -316,10 +298,8 @@ def os_walk_pop():
                                   ".m4p", ".wav",)) and not tempCurrentFile.startswith(".") \
                             and os.path.isfile(tempCurrentFile):
                         currentFileList.append(tempCurrentFile)
-
             for currentFile in currentFileList:
                 pool.imap_unordered(process_audio_files, (currentFile,))
-
             pool.close()
             pool.join()
             end = time.time()
@@ -344,7 +324,7 @@ if __name__ == "__main__":
         try:
             popNum = int(input("Choose 1 or 2 and hit enter... "))
             if popNum < 1 or popNum > 2:
-                raise ValueError  # this will send it to the print message and back to the input option
+                raise ValueError
             break
         except ValueError:
             print("Invalid integer. The number must be either 1 or 2.")
@@ -352,7 +332,6 @@ if __name__ == "__main__":
         print("You selected " + str(popNum) + " Finder windows will popup")
     elif popNum == 2:
         print("You selected " + str(popNum) + " No popups")
-
     if os.path.exists(saveFilePath):
         f = open(saveFilePath, "r")
         AJDownloadsFolderTemp = f.read()
@@ -368,7 +347,6 @@ if __name__ == "__main__":
             print("Downloads folder = " + str(AJDownloadsFolder))
             print("")
             print("Monitoring " + str(AJDownloadsFolder) + "...")
-
         else:
             clear()
             userFolder = input("Drag your AJ downloads folder here and press enter...")
@@ -383,7 +361,6 @@ if __name__ == "__main__":
             print("Downloads folder = " + str(AJDownloadsFolder))
             print("")
             print("Monitoring " + str(AJDownloadsFolder) + "...")
-
     else:
         clear()
         userFolder = input("Drag your AJ downloads folder here and press enter...")
@@ -419,6 +396,5 @@ if __name__ == "__main__":
         print("Interrupt received, stopping...")
     finally:
         exit()
-
         observer.stop()
     observer.join()
