@@ -286,10 +286,13 @@ def os_walk():
             print('processed ' + str(len(currentFileList)) + ' files in ' + pTime + 's')
             # print(repr(currentFileList).lower())
             if search('(tails|kit)', repr(currentFileList).lower()):
-                print("Probably a kit, leaving files where they are")
+                print("This could be a kit, leaving files where they are")
             else:
                 for currentFile in currentFileList:
-                    shutil.move(currentFile, os.path.join(AJDownloadsFolder, os.path.basename(currentFile)))
+                    shutil.move(currentFile,
+                                os.path.join(AJDownloadsFolder,
+                                             str(currentFileList.index(currentFile)) + "_" +
+                                             os.path.basename(currentFile)))
 
 
 def os_walk_pop():
