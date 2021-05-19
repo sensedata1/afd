@@ -284,7 +284,6 @@ def os_walk():
             end = time.time()
             pTime = str("{:.2f}".format(end - start))
             print('processed ' + str(len(currentFileList)) + ' files in ' + pTime + 's')
-            # print(repr(currentFileList).lower())
             if search('(tails|kit)', repr(currentFileList).lower()):
                 print("This could be a kit, leaving files where they are")
             else:
