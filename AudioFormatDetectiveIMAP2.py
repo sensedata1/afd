@@ -111,11 +111,12 @@ def process_audio_files(currentFile):
             with srVoiceTestWav as source:
                 audio = r.record(source, duration=10)
                 recognisedSpeech = str((r.recognize_google(audio)))
-                if "audio" or "jungle" or "audiojungle" in recognisedSpeech:
-                    ch = red("WM")
-                if "jungle" in recognisedSpeech:
-                    ch = red("WM")
-                if "audi" in recognisedSpeech:
+                if search('(audio|jungle|audi)', recognisedSpeech.lower()):
+                    # if "audio" in recognisedSpeech:
+                    #     ch = red("WM")
+                    # if "jungle" in recognisedSpeech:
+                    #     ch = red("WM")
+                    # if "audi" in recognisedSpeech:
                     ch = red("WM")
                 else:
                     ch = "  "
@@ -170,11 +171,12 @@ def process_audio_files(currentFile):
                 # recognisedSpeech = str((r.recognize_wit(audio,
                 # key='RGAIIA26NIKLTR5PFPTMZM5MEHUC4MI3', show_all=False)))
                 recognisedSpeech = str((r.recognize_google(audio, )))
-                if "audio" in recognisedSpeech:
-                    ch = red("WM")
-                if "jungle" in recognisedSpeech:
-                    ch = red("WM")
-                if "audi" in recognisedSpeech:
+                if search('(audio|jungle|audi)', recognisedSpeech.lower()):
+                    # if "audio" in recognisedSpeech:
+                    #     ch = red("WM")
+                    # if "jungle" in recognisedSpeech:
+                    #     ch = red("WM")
+                    # if "audi" in recognisedSpeech:
                     ch = red("WM")
                 else:
                     ch = "  "
@@ -258,6 +260,7 @@ def os_walk():
                                   ".m4p", ".wav",)) and not tempCurrentFile.startswith(".") \
                             and os.path.isfile(tempCurrentFile):
                         currentFileList.append(tempCurrentFile)
+                        currentFileList.sort()
             for currentFile in currentFileList:
                 pool.imap_unordered(process_audio_files, (currentFile,))
             pool.close()
@@ -266,7 +269,7 @@ def os_walk():
             pTime = str("{:.2f}".format(end - start))
             print('processed ' + str(len(currentFileList)) + ' files in ' + pTime + 's')
             if search('(tails|kit)', repr(currentFileList).lower()):
-                print("This could be a kit, leaving files where they are")
+                print("Kit detected, leaving files in folders")
             else:
                 for currentFile in currentFileList:
                     shutil.move(currentFile,
@@ -294,6 +297,7 @@ def os_walk_pop():
                                   ".m4p", ".wav",)) and not tempCurrentFile.startswith(".") \
                             and os.path.isfile(tempCurrentFile):
                         currentFileList.append(tempCurrentFile)
+                        currentFileList.sort()
             for currentFile in currentFileList:
                 pool.imap_unordered(process_audio_files, (currentFile,))
             pool.close()
@@ -307,6 +311,43 @@ def os_walk_pop():
                     subprocess.Popen(["open", subdirectory])
 
 
+def os_walk_basic():
+    os.chdir(AJDownloadsFolder)
+    cwd = os.getcwd()
+    if unzip():
+        clear()
+        print('\n' * 50)
+        print("analysing...")
+        currentFileList = []
+        start = time.time()
+        with Pool(processes=multiprocessing.cpu_count()) as pool:
+            for directory, subdirectories, files in os.walk(cwd):
+                for file in files:
+                    tempCurrentFile = os.path.join(directory, file)
+                    if tempCurrentFile.lower().endswith \
+                                ((".mp3", ".aac",
+                                  ".aiff", ".aif", ".flac", ".m4a",
+                                  ".m4p", ".wav",)) and not tempCurrentFile.startswith(".") \
+                            and os.path.isfile(tempCurrentFile):
+                        currentFileList.append(tempCurrentFile)
+                        currentFileList.sort()
+            for currentFile in currentFileList:
+                pool.imap_unordered(process_audio_files, (currentFile,))
+            pool.close()
+            pool.join()
+            end = time.time()
+            pTime = str("{:.2f}".format(end - start))
+            print('processed ' + str(len(currentFileList)) + ' files in ' + pTime + 's')
+            # if search('(tails|kit)', repr(currentFileList).lower()):
+            #     print("This could be a kit, leaving files where they are")
+            # else:
+            #     for currentFile in currentFileList:
+            #         shutil.move(currentFile,
+            #                     os.path.join(AJDownloadsFolder,
+            #                                  str(currentFileList.index(currentFile)) + "_" +
+            #                                  os.path.basename(currentFile)))
+
+
 if __name__ == "__main__":
     multiprocessing.set_start_method('spawn')
     clear()
@@ -314,20 +355,25 @@ if __name__ == "__main__":
     pathname = os.path.dirname(sys.argv[0])
     saveFile = "folder.txt"
     saveFilePath = os.path.join(pathname, saveFile)
-    print("1) Popup finder windows after unzipping and processing? ...or ")
-    print("2) No popups")
+    print("Choose a number...")
+    print("1) Popup finder windows after unzipping and processing")
+    print("2) No popups, index files and move to top level")
+    print("3) Basic")
     while True:
         try:
-            popNum = int(input("Choose 1 or 2 and hit enter... "))
-            if popNum < 1 or popNum > 2:
+            popNum = int(input("Choose 1, 2 or 3 and hit enter... "))
+            if popNum < 1 or popNum > 3:
                 raise ValueError
             break
         except ValueError:
-            print("Invalid integer. The number must be either 1 or 2.")
+            print("Invalid integer. The number must be either 1, 2 or 3.")
     if popNum == 1:
         print("You selected " + str(popNum) + " Finder windows will popup")
     elif popNum == 2:
-        print("You selected " + str(popNum) + " No popups")
+        print("You selected " + str(popNum) + " No popups, index files and move to top level")
+    elif popNum == 3:
+        print("You selected " + str(popNum) + " Basic")
+
     if os.path.exists(saveFilePath):
         f = open(saveFilePath, "r")
         AJDownloadsFolderTemp = f.read()
@@ -388,6 +434,8 @@ if __name__ == "__main__":
                 os_walk()
             elif popNum == 1:
                 os_walk_pop()
+            elif popNum == 3:
+                os_walk_basic()
     except KeyboardInterrupt:
         print("Interrupt received, stopping...")
     finally:
