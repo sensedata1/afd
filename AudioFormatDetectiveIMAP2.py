@@ -338,14 +338,6 @@ def os_walk_basic():
             end = time.time()
             pTime = str("{:.2f}".format(end - start))
             print('processed ' + str(len(currentFileList)) + ' files in ' + pTime + 's')
-            # if search('(tails|kit)', repr(currentFileList).lower()):
-            #     print("This could be a kit, leaving files where they are")
-            # else:
-            #     for currentFile in currentFileList:
-            #         shutil.move(currentFile,
-            #                     os.path.join(AJDownloadsFolder,
-            #                                  str(currentFileList.index(currentFile)) + "_" +
-            #                                  os.path.basename(currentFile)))
 
 
 if __name__ == "__main__":
