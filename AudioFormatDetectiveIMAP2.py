@@ -110,7 +110,7 @@ def process_audio_files(currentFile):
         srVoiceTestWav = sr.AudioFile(dst)
         try:
             with srVoiceTestWav as source:
-                audio = r.record(source, duration=10)
+                audio = r.record(source, duration=11)
                 recognisedSpeech = str((r.recognize_google(audio, language='en-GB')))
                 if search('(audio|jungle|audi)', recognisedSpeech.lower()):
                     ch = red("WM")
@@ -162,7 +162,7 @@ def process_audio_files(currentFile):
         srVoiceTestWav = sr.AudioFile(currentFile)
         try:
             with srVoiceTestWav as source:
-                audio = r.record(source, duration=10)
+                audio = r.record(source, duration=11)
                 # Alternative speech recognition #
                 # recognisedSpeech = str((r.recognize_wit(audio,
                 # key='RGAIIA26NIKLTR5PFPTMZM5MEHUC4MI3', show_all=False)))
