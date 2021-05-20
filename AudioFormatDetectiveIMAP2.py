@@ -260,7 +260,6 @@ def os_walk():
                                   ".m4p", ".wav",)) and not tempCurrentFile.startswith(".") \
                             and os.path.isfile(tempCurrentFile):
                         currentFileList.append(tempCurrentFile)
-                        currentFileList.sort()
             for currentFile in currentFileList:
                 pool.imap_unordered(process_audio_files, (currentFile,))
             pool.close()
@@ -297,7 +296,6 @@ def os_walk_pop():
                                   ".m4p", ".wav",)) and not tempCurrentFile.startswith(".") \
                             and os.path.isfile(tempCurrentFile):
                         currentFileList.append(tempCurrentFile)
-                        currentFileList.sort()
             for currentFile in currentFileList:
                 pool.imap_unordered(process_audio_files, (currentFile,))
             pool.close()
@@ -330,7 +328,6 @@ def os_walk_basic():
                                   ".m4p", ".wav",)) and not tempCurrentFile.startswith(".") \
                             and os.path.isfile(tempCurrentFile):
                         currentFileList.append(tempCurrentFile)
-                        currentFileList.sort()
             for currentFile in currentFileList:
                 pool.imap_unordered(process_audio_files, (currentFile,))
             pool.close()
