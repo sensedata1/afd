@@ -18,6 +18,7 @@ from watchdog.observers import Observer
 from multiprocessing import Process, Pool
 import multiprocessing
 import sys
+from re import search
 
 # Let's define some colours
 black = lambda text: '\033[0;30m' + text + '\033[0m'
@@ -111,14 +112,8 @@ def process_audio_files(currentFile):
             with srVoiceTestWav as source:
                 audio = r.record(source, duration=10)
                 recognisedSpeech = str((r.recognize_google(audio)))
-                if "audio" or "jungle" or "audiojungle" in recognisedSpeech:
+                if search('(audio|jungle|audi)', recognisedSpeech.lower()):
                     ch = red("WM")
-                if "jungle" in recognisedSpeech:
-                    ch = red("WM")
-                if "audi" in recognisedSpeech:
-                    ch = red("WM")
-                else:
-                    ch = "  "
         except Exception as e:
             ch = "  "
             wm = "nowm"
@@ -170,14 +165,8 @@ def process_audio_files(currentFile):
                 # recognisedSpeech = str((r.recognize_wit(audio,
                 # key='RGAIIA26NIKLTR5PFPTMZM5MEHUC4MI3', show_all=False)))
                 recognisedSpeech = str((r.recognize_google(audio, )))
-                if "audio" in recognisedSpeech:
+                if search('(audio|jungle|audi)', recognisedSpeech.lower()):
                     ch = red("WM")
-                if "jungle" in recognisedSpeech:
-                    ch = red("WM")
-                if "audi" in recognisedSpeech:
-                    ch = red("WM")
-                else:
-                    ch = "  "
         except Exception as e:
             ch = "  "
             wm = "nowm"

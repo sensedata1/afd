@@ -31,6 +31,7 @@ cyan = lambda text: '\033[0;36m' + text + '\033[0m'
 white = lambda text: '\033[0;37m' + text + '\033[0m'
 
 r = sr.Recognizer()
+# r.dynamic_energy_threshold = True
 
 
 # Set up a "clear" with cross platform compatibility with Windows
@@ -110,13 +111,8 @@ def process_audio_files(currentFile):
         try:
             with srVoiceTestWav as source:
                 audio = r.record(source, duration=10)
-                recognisedSpeech = str((r.recognize_google(audio)))
+                recognisedSpeech = str((r.recognize_google(audio, language='en-GB')))
                 if search('(audio|jungle|audi)', recognisedSpeech.lower()):
-                    # if "audio" in recognisedSpeech:
-                    #     ch = red("WM")
-                    # if "jungle" in recognisedSpeech:
-                    #     ch = red("WM")
-                    # if "audi" in recognisedSpeech:
                     ch = red("WM")
                 else:
                     ch = "  "
@@ -170,13 +166,8 @@ def process_audio_files(currentFile):
                 # Alternative speech recognition #
                 # recognisedSpeech = str((r.recognize_wit(audio,
                 # key='RGAIIA26NIKLTR5PFPTMZM5MEHUC4MI3', show_all=False)))
-                recognisedSpeech = str((r.recognize_google(audio, )))
+                recognisedSpeech = str((r.recognize_google(audio, language='en-GB')))
                 if search('(audio|jungle|audi)', recognisedSpeech.lower()):
-                    # if "audio" in recognisedSpeech:
-                    #     ch = red("WM")
-                    # if "jungle" in recognisedSpeech:
-                    #     ch = red("WM")
-                    # if "audi" in recognisedSpeech:
                     ch = red("WM")
                 else:
                     ch = "  "
