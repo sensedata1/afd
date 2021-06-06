@@ -245,14 +245,14 @@ def os_walk():
             for directory, subdirectories, files in os.walk(cwd):
                 for file in files:
                     tempCurrentFile = os.path.join(directory, file)
-                    if tempCurrentFile.lower().endswith \
-                                ((".mp3", ".aac",
-                                  ".aiff", ".aif", ".flac", ".m4a",
-                                  ".m4p", ".wav",)) and not tempCurrentFile.startswith(".") \
-                            and os.path.isfile(tempCurrentFile):
-                        currentFileList.append(tempCurrentFile)
+                    currentFileList.append(tempCurrentFile)
             for currentFile in currentFileList:
-                pool.imap_unordered(process_audio_files, (currentFile,))
+                if tempCurrentFile.lower().endswith \
+                            ((".mp3", ".aac",
+                              ".aiff", ".aif", ".flac", ".m4a",
+                              ".m4p", ".wav",)) and not tempCurrentFile.startswith(".") \
+                        and os.path.isfile(tempCurrentFile):
+                    pool.imap_unordered(process_audio_files, (currentFile,))
             pool.close()
             pool.join()
             end = time.time()
@@ -262,10 +262,11 @@ def os_walk():
                 print("Kit detected, leaving files in folders")
             else:
                 for currentFile in currentFileList:
-                    shutil.move(currentFile,
-                                os.path.join(AJDownloadsFolder,
-                                             str(currentFileList.index(currentFile)) + "_" +
-                                             os.path.basename(currentFile)))
+                    if not currentFile.startswith("."):
+                        shutil.move(currentFile,
+                                    os.path.join(AJDownloadsFolder,
+                                                 str(currentFileList.index(currentFile)) + "_" +
+                                                 os.path.basename(currentFile)))
 
 
 def os_walk_pop():
