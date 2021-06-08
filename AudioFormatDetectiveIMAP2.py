@@ -31,6 +31,8 @@ cyan = lambda text: '\033[0;36m' + text + '\033[0m'
 white = lambda text: '\033[0;37m' + text + '\033[0m'
 
 r = sr.Recognizer()
+
+
 # r.dynamic_energy_threshold = True
 
 
@@ -261,6 +263,13 @@ def os_walk():
             if search('(tails|kit)', repr(currentFileList).lower()):
                 print("Kit detected, leaving files in folders")
             else:
+                currentFileList = []
+                for directory, subdirectories, files in os.walk(cwd):
+                    for file in files:
+                        tempCurrentFile = os.path.join(directory, file)
+                        if not tempCurrentFile.startswith(".") \
+                                and os.path.isfile(tempCurrentFile):
+                            currentFileList.append(tempCurrentFile)
                 for currentFile in currentFileList:
                     shutil.move(currentFile,
                                 os.path.join(AJDownloadsFolder,
